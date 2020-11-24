@@ -12,9 +12,10 @@ on:
     branches: [master]
 
 jobs:
-  deploy:
+  run:
 
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
+    container: docker://dvcorg/cml-py3:latest
 
     steps:
     - uses: actions/checkout@v2
@@ -31,5 +32,8 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python train.py sdist bdist_wheel
-        twine upload dist/*
+        pip install -r requirements.txt
+        python train.py 
+        
+        echo "Model Metrics:"
+        cat metrics.txt
